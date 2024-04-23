@@ -1,0 +1,10 @@
+.DS_Store
+*.pyc
+__pychache__/
+instance/
+dist/
+build/
+.egg-info/
+node_modules/
+.env
+.vscode
