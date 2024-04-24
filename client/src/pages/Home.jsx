@@ -14,21 +14,36 @@ const Home = () => {
 		setCompendium(data.data);
 	};
 
+	const handleSubmit = (whichForm) => {
+		return async (fields) => {
+			const res = await fetch(`/${whichForm}`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(fields),
+			});
+			const data = await res.json();
+			setUser(data.user);
+		};
+	};
+
 	useEffect(() => {
 		getCompendium();
 	}, []);
+
 	console.log(compendium);
 
 	return (
 		<>
 			<h1>Home</h1>
 			<SimpleBackdrop />
-            {/* If the compendium data has loaded, show the Search Bar. Otherwise, show the LoadingBackdrop */}
-            {
-                compendium 
-                ? <SearchBar compendium={compendium} /> 
-                : <LoadingBackdrop open={open} />
-            }
+			{/* If the compendium data has loaded, show the Search Bar. Otherwise, show the LoadingBackdrop */}
+			{compendium ? (
+				<SearchBar compendium={compendium} />
+			) : (
+				<LoadingBackdrop open={open} />
+			)}
 		</>
 	);
 };
