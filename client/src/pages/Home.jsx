@@ -14,20 +14,6 @@ const Home = () => {
 		setCompendium(data.data);
 	};
 
-	const handleSubmit = (whichForm) => {
-		return async (fields) => {
-			const res = await fetch(`/${whichForm}`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(fields),
-			});
-			const data = await res.json();
-			setUser(data.user);
-		};
-	};
-
 	useEffect(() => {
 		getCompendium();
 	}, []);
