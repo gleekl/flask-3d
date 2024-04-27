@@ -2,36 +2,41 @@ import { Suspense, useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import SimpleBackdrop from "../components/LoadingBackdrop";
 import LoadingBackdrop from "../components/LoadingBackdrop";
+import EntryCard from "../components/EntryCard";
+import EntryGrid from "../components/EntryGrid";
 
-const Home = () => {
-	const [compendium, setCompendium] = useState(null);
-	const [open, setOpen] = useState(true);
+const Home = ({ compendium }) => {
+    const [entry, setEntry] = useState(null);
+    const [open, setOpen] = useState(true);
 
-	const getCompendium = async () => {
-		const url = "http://127.0.0.1:5000/api";
-		const res = await fetch(url);
-		const data = await res.json();
-		setCompendium(data.data);
-	};
+    const handleSubmit = async (field) => {
+        const res = await fetch(`/api/compendium/entry/${field}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(search),
+        });
+        const data = await res.json();
 
-	useEffect(() => {
-		getCompendium();
-	}, []);
+        console.log(data);
+    };
 
-	console.log(compendium);
-
-	return (
-		<>
-			<h1>Home</h1>
-			<SimpleBackdrop />
-			{/* If the compendium data has loaded, show the Search Bar. Otherwise, show the LoadingBackdrop */}
-			{compendium ? (
-				<SearchBar compendium={compendium} />
-			) : (
-				<LoadingBackdrop open={open} />
-			)}
-		</>
-	);
+    return (
+        <>
+            <h1>Home</h1>
+            {/* If the compendium data has loaded, show the Search Bar. Otherwise, show the LoadingBackdrop */}
+            {compendium ? (
+                <SearchBar
+                    compendium={compendium}
+                    handleSubmit={handleSubmit}
+                />
+            ) : (
+                <LoadingBackdrop open={open} />
+            )}
+            {compendium && <EntryGrid compendium={compendium} />}
+        </>
+    );
 };
 
 export default Home;
